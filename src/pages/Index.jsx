@@ -1,138 +1,137 @@
 import React, { useState } from "react";
 import { Box, Button, FormControl, FormLabel, Input, VStack, Text, Image, useToast } from "@chakra-ui/react";
-import { FaCamera, FaIdCard, FaWallet } from "react-icons/fa";
+import { FaCamera, FaWallet } from "react-icons/fa";
+
+const SignUpForm = ({ onSignUp }) => (
+  <VStack spacing={4}>
+    <Text fontSize="2xl" fontWeight="bold">
+      Sign Up
+    </Text>
+    <FormControl id="email">
+      <FormLabel>Email address</FormLabel>
+      <Input type="email" />
+    </FormControl>
+    <FormControl id="password">
+      <FormLabel>Password</FormLabel>
+      <Input type="password" />
+    </FormControl>
+    <Button onClick={onSignUp} colorScheme="blue">
+      Sign Up
+    </Button>
+  </VStack>
+);
+
+const VerificationForm = ({ onVerify }) => {
+  const [idImage, setIdImage] = useState(null);
+  const [selfieImage, setSelfieImage] = useState(null);
+
+  return (
+    <VStack spacing={4}>
+      <Text fontSize="2xl" fontWeight="bold">
+        Verification
+      </Text>
+      <Box>
+        <FormLabel>Upload ID</FormLabel>
+        <Input type="file" accept="image/*" onChange={(e) => setIdImage(e.target.files[0])} />
+        {idImage && <Image src={URL.createObjectURL(idImage)} alt="ID" mt={2} />}
+      </Box>
+      <Box>
+        <FormLabel>Take a Selfie</FormLabel>
+        <Button leftIcon={<FaCamera />}>Take Selfie</Button>
+        {selfieImage && <Image src={URL.createObjectURL(selfieImage)} alt="Selfie" mt={2} />}
+      </Box>
+      <Button onClick={onVerify} colorScheme="blue">
+        Verify
+      </Button>
+    </VStack>
+  );
+};
+
+const BankConnectionForm = ({ onConnect }) => (
+  <VStack spacing={4}>
+    <Text fontSize="2xl" fontWeight="bold">
+      Connect Bank Account
+    </Text>
+    <FormControl id="bankAccount">
+      <FormLabel>Bank Account Number</FormLabel>
+      <Input type="text" />
+    </FormControl>
+    <Button onClick={onConnect} colorScheme="blue">
+      Connect Bank
+    </Button>
+  </VStack>
+);
+
+const VirtualWallet = ({ balance, onCreateCard }) => (
+  <VStack spacing={4}>
+    <Text fontSize="2xl" fontWeight="bold">
+      Virtual Wallet
+    </Text>
+    <Box borderWidth={1} borderRadius="md" p={4} width="100%" textAlign="center">
+      <FaWallet size={48} />
+      <Text fontSize="xl" fontWeight="bold" mt={2}>
+        Balance: {balance} USD
+      </Text>
+    </Box>
+    <Button onClick={onCreateCard} colorScheme="blue">
+      Create Virtual Card
+    </Button>
+  </VStack>
+);
 
 const Index = () => {
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [idImage, setIdImage] = useState(null);
-  const [selfieImage, setSelfieImage] = useState(null);
-  const [bankAccount, setBankAccount] = useState("");
   const [balance, setBalance] = useState(0);
   const toast = useToast();
 
+  const toastConfig = {
+    duration: 3000,
+    isClosable: true,
+    status: "success",
+  };
+
   const handleSignUp = () => {
-    // TODO: Implement sign up logic
     toast({
       title: "Account created.",
       description: "Your account has been successfully created.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+      ...toastConfig,
     });
     setStep(2);
   };
 
   const handleVerification = () => {
-    // TODO: Implement ID and selfie verification logic
     toast({
       title: "Verification complete.",
       description: "Your identity has been verified.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+      ...toastConfig,
     });
     setStep(3);
   };
 
   const handleBankConnection = () => {
-    // TODO: Implement bank account connection logic
     toast({
       title: "Bank connected.",
       description: "Your bank account has been successfully connected.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+      ...toastConfig,
     });
-    setBalance(1000); // Example balance
+    setBalance(1000);
     setStep(4);
   };
 
   const handleCreateVirtualCard = () => {
-    // TODO: Implement virtual card creation logic
     toast({
       title: "Virtual card created.",
       description: "Your virtual card is ready to use.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+      ...toastConfig,
     });
   };
 
   return (
     <Box p={4}>
-      {step === 1 && (
-        <VStack spacing={4}>
-          <Text fontSize="2xl" fontWeight="bold">
-            Sign Up
-          </Text>
-          <FormControl id="email">
-            <FormLabel>Email address</FormLabel>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </FormControl>
-          <FormControl id="password">
-            <FormLabel>Password</FormLabel>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </FormControl>
-          <Button onClick={handleSignUp} colorScheme="blue">
-            Sign Up
-          </Button>
-        </VStack>
-      )}
-
-      {step === 2 && (
-        <VStack spacing={4}>
-          <Text fontSize="2xl" fontWeight="bold">
-            Verification
-          </Text>
-          <Box>
-            <FormLabel>Upload ID</FormLabel>
-            <Input type="file" accept="image/*" onChange={(e) => setIdImage(e.target.files[0])} />
-            {idImage && <Image src={URL.createObjectURL(idImage)} alt="ID" mt={2} />}
-          </Box>
-          <Box>
-            <FormLabel>Take a Selfie</FormLabel>
-            <Button leftIcon={<FaCamera />}>Take Selfie</Button>
-            {selfieImage && <Image src={URL.createObjectURL(selfieImage)} alt="Selfie" mt={2} />}
-          </Box>
-          <Button onClick={handleVerification} colorScheme="blue">
-            Verify
-          </Button>
-        </VStack>
-      )}
-
-      {step === 3 && (
-        <VStack spacing={4}>
-          <Text fontSize="2xl" fontWeight="bold">
-            Connect Bank Account
-          </Text>
-          <FormControl id="bankAccount">
-            <FormLabel>Bank Account Number</FormLabel>
-            <Input type="text" value={bankAccount} onChange={(e) => setBankAccount(e.target.value)} />
-          </FormControl>
-          <Button onClick={handleBankConnection} colorScheme="blue">
-            Connect Bank
-          </Button>
-        </VStack>
-      )}
-
-      {step === 4 && (
-        <VStack spacing={4}>
-          <Text fontSize="2xl" fontWeight="bold">
-            Virtual Wallet
-          </Text>
-          <Box borderWidth={1} borderRadius="md" p={4} width="100%" textAlign="center">
-            <FaWallet size={48} />
-            <Text fontSize="xl" fontWeight="bold" mt={2}>
-              Balance: {balance} USD
-            </Text>
-          </Box>
-          <Button onClick={handleCreateVirtualCard} colorScheme="blue">
-            Create Virtual Card
-          </Button>
-        </VStack>
-      )}
+      {step === 1 && <SignUpForm onSignUp={handleSignUp} />}
+      {step === 2 && <VerificationForm onVerify={handleVerification} />}
+      {step === 3 && <BankConnectionForm onConnect={handleBankConnection} />}
+      {step === 4 && <VirtualWallet balance={balance} onCreateCard={handleCreateVirtualCard} />}
     </Box>
   );
 };
